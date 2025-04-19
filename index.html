@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Liam’s Aero Portfolio</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liam’s Aerospace Portfolio</title>
 
   <!-- Google Fonts -->
   <link 
@@ -30,59 +30,52 @@
 
   <!-- Custom CSS -->
   <style>
-    /* Global scroll‑snap + smooth scroll */
-    html {
-      scroll-behavior: smooth;
-      scroll-snap-type: y mandatory;
-    }
-    section {
-      scroll-snap-align: start;
-    }
-    /* Starfield */
-    body { margin:0; overflow-x:hidden; background:#000014; color:#f1f5f9; }
-    #starfield {
-      position: fixed; inset:0; z-index:-10;
-      background: #000014;
-    }
-    /* Animations */
-    @keyframes fadeInUp {
-      0% { opacity:0; transform: translateY(20px); }
-      100% { opacity:1; transform: translateY(0); }
-    }
-    .fade-in-up { opacity:0; animation: fadeInUp 1s ease-out forwards; }
-    .delay-200 { animation-delay: 0.2s; }
-    .delay-400 { animation-delay: 0.4s; }
-    /* Fonts */
-    body, p, a, ul li a { font-family:'Roboto',sans-serif; }
-    h1,h2,nav h1 { font-family:'Bebas Neue',cursive; letter-spacing:0.05em; }
+    /* Smooth scroll */
+    html { scroll-behavior: smooth; }
 
-    /* Section styling */
-    section { height:100vh; display:flex; justify-content:center; align-items:center; }
-    /* Projects placeholder */
-    #projects { background: #11121a; }
-    /* About placeholder */
-    #about    { background: #181826; }
+    /* Starfield */
+    body { margin: 0; overflow-x: hidden; background: #000014; color: #f1f5f9; }
+    #starfield {
+      position: fixed; inset: 0; z-index: -10; background: #000014;
+    }
+
+    /* Slide‑in animation */
+    @keyframes slideInUp {
+      0%   { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .animate {
+      animation: slideInUp 0.8s ease-out forwards;
+    }
+
+    /* Fonts */
+    body, p, a, nav ul li a { font-family: 'Roboto', sans-serif; }
+    h1, h2, h3, nav h1 { font-family: 'Bebas Neue', cursive; letter-spacing: 0.05em; }
   </style>
 </head>
 
 <body>
-  <!-- Starfield -->
+  <!-- Starfield Canvas -->
   <canvas id="starfield"></canvas>
   <script>
-    const c = document.getElementById('starfield'),
-          ctx = c.getContext('2d');
-    let stars = [], N=250;
-    function resize(){ c.width=innerWidth; c.height=innerHeight; }
-    window.addEventListener('resize',resize); resize();
-    for(let i=0;i<N;i++){
-      stars.push({ x: Math.random()*c.width, y: Math.random()*c.height, r: Math.random()*1.5 });
+    const canvas = document.getElementById('starfield'),
+          ctx = canvas.getContext('2d');
+    let stars = [], N = 200;
+    function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+    window.addEventListener('resize', resize); resize();
+    for (let i = 0; i < N; i++) {
+      stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 1.2 });
     }
-    (function draw(){
-      ctx.clearRect(0,0,c.width,c.height);
-      ctx.fillStyle='#fff';
-      stars.forEach(s=>{
+    (function draw() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = '#fff';
+      stars.forEach(s => {
         ctx.beginPath();
-        ctx.arc(s.x,s.y,s.r,0,2*Math.PI);
+        ctx.arc(s.x, s.y, s.r, 0, 2*Math.PI);
         ctx.fill();
       });
       requestAnimationFrame(draw);
@@ -90,50 +83,66 @@
   </script>
 
   <!-- Nav -->
-  <header class="fixed top-0 w-full bg-primary/60 backdrop-blur-sm z-50 fade-in-up delay-200">
+  <header class="fixed top-0 w-full bg-primary/60 backdrop-blur-sm z-50">
     <nav class="max-w-5xl mx-auto flex justify-between items-center p-4 text-white">
       <h1 class="text-2xl">Liam Aero</h1>
       <ul class="flex space-x-6 uppercase text-sm">
-        <li><a href="#hero"    class="hover:text-accent">Home</a></li>
-        <li><a href="#projects"class="hover:text-accent">Projects</a></li>
-        <li><a href="#about"   class="hover:text-accent">About</a></li>
+        <li><a href="#hero" class="hover:text-accent">Home</a></li>
+        <li><a href="#projects" class="hover:text-accent">Projects</a></li>
+        <li><a href="#about" class="hover:text-accent">About</a></li>
         <li><a href="#contact" class="hover:text-accent">Contact</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- Hero -->
-  <section id="hero" class="relative flex flex-col items-center justify-center px-4 fade-in-up delay-400">
-    <h1 class="text-6xl text-primary mb-2 uppercase">Upcoming Launch</h1>
-    <h2 class="text-7xl text-white font-bold mb-6 uppercase">NROL‑145 MISSION</h2>
-    <p class="text-xl max-w-2xl text-center mb-8">Engineering space systems, one project at a time.</p>
-    <a href="#projects" class="px-8 py-4 bg-accent text-white rounded hover:bg-accent/90 uppercase tracking-wide">
-      View Projects
-    </a>
+  <!-- Hero Section -->
+  <section id="hero" class="min-h-screen flex flex-col items-center justify-center px-4">
+    <h1 class="text-6xl text-primary mb-4 uppercase animate-on-scroll">Hi, I’m Liam</h1>
+    <p class="text-xl max-w-2xl text-center mb-6 animate-on-scroll">I’m an Aerospace Engineering student passionate about designing space systems and rovers.</p>
+    <a href="#projects" class="px-8 py-4 bg-accent text-white rounded uppercase tracking-wide animate-on-scroll">View Projects</a>
   </section>
 
-  <!-- Projects Placeholder -->
-  <section id="projects" class="flex flex-col items-center justify-center text-center px-4">
-    <h2 class="text-5xl text-accent font-bold mb-4 uppercase">Projects</h2>
-    <p class="text-lg max-w-xl text-text mb-6">Your standout engineering work will go here—case studies, 3D models, metrics.</p>
-    <a href="#" class="px-6 py-3 bg-primary text-white rounded hover:bg-primary/90 uppercase">See Details</a>
+  <!-- Projects Section -->
+  <section id="projects" class="min-h-screen flex flex-col items-center justify-center px-4 bg-[#11121a]">
+    <h2 class="text-5xl text-accent mb-4 uppercase animate-on-scroll">Projects</h2>
+    <p class="text-lg max-w-xl text-center mb-6 animate-on-scroll">Showcasing my hands‑on work in rover subsystems, CFD studies, and system prototyping.</p>
+    <a href="#" class="px-6 py-3 bg-primary text-white rounded uppercase animate-on-scroll">See Details</a>
   </section>
 
-  <!-- About Placeholder -->
-  <section id="about" class="flex flex-col items-center justify-center text-center px-4">
-    <h2 class="text-5xl text-accent font-bold mb-4 uppercase">About Me</h2>
-    <p class="text-lg max-w-xl text-text mb-6">
-      Mechanical & Aerospace Engineering student at McMaster University, 
-      rover‑team enthusiast, and space technology aficionado.
+  <!-- About Section -->
+  <section id="about" class="min-h-screen flex flex-col items-center justify-center px-4">
+    <h2 class="text-5xl text-accent mb-4 uppercase animate-on-scroll">About Me</h2>
+    <p class="text-lg max-w-xl text-center mb-6 animate-on-scroll">
+      Second‑year Mechanical & Aerospace Engineering student at McMaster University. On the Mars rover team, with skills in SolidWorks, Python, and 3D design.
     </p>
-    <a href="#" class="px-6 py-3 bg-primary text-white rounded hover:bg-primary/90 uppercase">Learn More</a>
+    <a href="#" class="px-6 py-3 bg-primary text-white rounded uppercase animate-on-scroll">Learn More</a>
   </section>
 
-  <!-- Contact Placeholder -->
-  <section id="contact" class="flex flex-col items-center justify-center text-center px-4">
-    <h2 class="text-5xl text-accent font-bold mb-4 uppercase">Get In Touch</h2>
-    <p class="text-lg max-w-xl text-text mb-6">Ready to collaborate on the next space mission? Let’s talk.</p>
-    <a href="mailto:your.email@example.com" class="px-6 py-3 bg-primary text-white rounded hover:bg-primary/90 uppercase">Email Me</a>
+  <!-- Contact Section -->
+  <section id="contact" class="min-h-screen flex flex-col items-center justify-center px-4 bg-[#181826]">
+    <h2 class="text-5xl text-accent mb-4 uppercase animate-on-scroll">Contact</h2>
+    <p class="text-lg max-w-xl text-center mb-6 animate-on-scroll">
+      Interested in working together? Reach out and let’s chat about aerospace innovations.
+    </p>
+    <a href="mailto:your.email@example.com" class="px-6 py-3 bg-accent text-white rounded uppercase animate-on-scroll">Email Me</a>
   </section>
+
+  <!-- Scroll‑triggered animation script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        observer.observe(el);
+      });
+    });
+  </script>
 </body>
 </html>
