@@ -50,13 +50,14 @@
     section { padding:1.5rem 0; }
     model-viewer { 
       cursor: grab; 
-      background: transparent; /* ensure transparency for everyone */
+      background: transparent; 
     }
     model-viewer:active { cursor: grabbing; }
     .drag-hint { font-size:.875rem; color:#aaa; margin-top:.5rem; text-align:center; }
   </style>
 </head>
 <body class="pt-nav">
+
   <!-- Starfield -->
   <canvas id="starfield"></canvas>
   <script>
@@ -118,7 +119,7 @@
             camera-controls
             auto-rotate
             auto-rotate-delay="0"
-            auto-rotate-speed="0.5"
+            auto-rotate-speed="-0.75"  <!-- negative for CCW, a bit faster -->
             exposure="0.3"
             shadow-intensity="0.7"
             interaction-prompt="auto"
@@ -177,7 +178,7 @@
   <!-- Scripts -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // scroll-triggered animations
+      // scroll-triggered reveals
       const obs = new IntersectionObserver(entries => {
         entries.forEach(e => {
           if (e.isIntersecting) {
