@@ -33,28 +33,25 @@
 
   <style>
     body {
-      margin: 0; overflow-x: hidden;
+      margin: 0;
+      overflow-x: hidden;
       background: radial-gradient(ellipse at bottom, #030314 0%, #0a0a25 100%);
-      color: #fff; font-family: 'Roboto', sans-serif;
+      color: #fff;
+      font-family: 'Roboto', sans-serif;
     }
     html { scroll-behavior: smooth; }
     .pt-nav { padding-top: 2.5rem; } /* 40px header */
     #starfield { position: fixed; inset: 0; z-index: -10; pointer-events: none; }
-
     @keyframes slideInUp {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
+      0% { opacity:0; transform: translateY(20px); }
+      100% { opacity:1; transform: translateY(0); }
     }
-    .animate-on-scroll { opacity: 0; transform: translateY(20px); }
+    .animate-on-scroll { opacity:0; transform: translateY(20px); }
     .animate { animation: slideInUp 0.8s ease-out forwards; }
+    h1,h2,nav h1 { font-family:'Bebas Neue', cursive; letter-spacing:.05em; }
+    section { padding:1.5rem 0; }
 
-    h1,h2,nav h1 {
-      font-family: 'Bebas Neue', cursive;
-      letter-spacing: 0.05em;
-    }
-    section { padding: 1.5rem 0; }
-
-    /* model-viewer affordances */
+    /* model-viewer cursors & transparency */
     model-viewer {
       cursor: grab;
       background: transparent;
@@ -63,22 +60,24 @@
       cursor: grabbing;
     }
     .drag-hint {
-      font-size: .875rem; color: #aaa;
-      margin-top: .5rem; text-align: center;
+      font-size:.875rem;
+      color:#aaa;
+      margin-top:.5rem;
+      text-align:center;
     }
   </style>
 </head>
 <body class="pt-nav">
+
   <!-- Starfield -->
   <canvas id="starfield"></canvas>
   <script>
     const c = document.getElementById('starfield'), ctx = c.getContext('2d');
     let stars = [], N = 200;
-    function resize() { c.width = innerWidth; c.height = innerHeight; }
-    window.addEventListener('resize', resize);
-    resize();
-    for (let i = 0; i < N; i++) {
-      stars.push({ x: Math.random() * c.width, y: Math.random() * c.height, r: Math.random() * 1.2 });
+    function resize(){ c.width = innerWidth; c.height = innerHeight; }
+    window.addEventListener('resize', resize); resize();
+    for(let i=0; i<N; i++){
+      stars.push({ x:Math.random()*c.width, y:Math.random()*c.height, r:Math.random()*1.2 });
     }
     (function draw(){
       ctx.clearRect(0,0,c.width,c.height);
@@ -111,7 +110,7 @@
     <section id="hero" class="min-h-screen flex items-center justify-center px-4">
       <div class="max-w-5xl w-full flex flex-col-reverse md:flex-row items-center justify-between gap-6">
 
-        <!-- Intro -->
+        <!-- Intro Text -->
         <div class="w-full md:w-1/2 space-y-4 text-center md:text-left">
           <h1 class="text-5xl md:text-6xl text-accent uppercase animate-on-scroll">Hi, I’m Liam</h1>
           <p class="text-lg max-w-md animate-on-scroll">
@@ -130,17 +129,20 @@
             <div class="w-64 h-64 bg-accent/20 rounded-full filter blur-3xl"></div>
           </div>
 
-          <!-- Properly closed model-viewer -->
+          <!-- model-viewer with built-in auto-rotate -->
           <model-viewer
             id="my-model"
             src="assets/sensor_mount.glb"
             alt="3D model of sensor mount"
             ar
             camera-controls
+            auto-rotate
+            auto-rotate-delay="0"
+            auto-rotate-speed="-1"
             exposure="0.3"
             shadow-intensity="0.7"
-            camera-orbit="90deg 75deg 2.5m"
             interaction-prompt="auto"
+            camera-orbit="90deg 75deg 2.5m"
             style="
               width:100%;
               max-width:360px;
@@ -156,7 +158,8 @@
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/20 border-t border-primary/30">
+    <section id="projects"
+      class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/20 border-t border-primary/30">
       <h2 class="text-5xl md:text-6xl text-accent mb-4 uppercase animate-on-scroll">Projects</h2>
       <p class="text-lg max-w-3xl text-center mb-8 animate-on-scroll">
         Explore my hands‑on work: rover subsystems, CFD studies, rapid prototyping case studies.
@@ -171,30 +174,34 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/20 border-t border-primary/30">
+    <section id="about"
+      class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/20 border-t border-primary/30">
       <h2 class="text-5xl md:text-6xl text-accent mb-4 uppercase animate-on-scroll">About Me</h2>
       <p class="text-lg max-w-3xl text-center mb-8 animate-on-scroll">
         Second‑year Mechanical & Aerospace Engineering student at McMaster University.<br/>
         Mars rover team member, CAD enthusiast, and Python developer.
       </p>
-      <a href="#contact" class="px-6 py-3 bg-accent text-background rounded-full uppercase animate-on-scroll">
+      <a href="#contact"
+         class="px-6 py-3 bg-accent text-background rounded-full uppercase animate-on-scroll">
         Contact Me
       </a>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/20 border-t border-primary/30">
+    <section id="contact"
+      class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/20 border-t border-primary/30">
       <h2 class="text-5xl md:text-6xl text-accent mb-4 uppercase animate-on-scroll">Get In Touch</h2>
       <p class="text-lg max-w-3xl text-center mb-8 animate-on-scroll">
         Let’s discuss how I can help your team reach new heights in aerospace engineering.
       </p>
-      <a href="mailto:your.email@example.com" class="px-6 py-3 bg-accent text-background rounded-full uppercase animate-on-scroll">
+      <a href="mailto:your.email@example.com"
+         class="px-6 py-3 bg-accent text-background rounded-full uppercase animate-on-scroll">
         Say Hello
       </a>
     </section>
   </div>
 
-  <!-- Pause/play handlers -->
+  <!-- Pause/play on drag handlers -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // scroll-triggered reveals
@@ -208,15 +215,12 @@
       }, { threshold: 0.15 });
       document.querySelectorAll('.animate-on-scroll').forEach(el => obs.observe(el));
 
-      // built‑in auto-rotate with pause/resume
+      // use built-in auto-rotate with pause/resume
       const mv = document.getElementById('my-model');
-      // ramp up CCW speed after load
-      mv.addEventListener('load', () => {
-        mv.autoRotate = true;
-        mv.autoRotateSpeed = -1;  // CCW, faster
-      });
       mv.addEventListener('pointerdown', () => mv.pause());
       window.addEventListener('pointerup',   () => mv.play());
+      // ensure it starts rotating
+      mv.addEventListener('load', () => mv.play());
     });
   </script>
 </body>
