@@ -28,7 +28,7 @@
     }
   </script>
 
-  <!-- model-viewer web component -->
+  <!-- model-viewer component -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
   <style>
@@ -194,17 +194,22 @@
       }, { threshold: 0.15 });
       document.querySelectorAll('.animate-on-scroll').forEach(el => obs.observe(el));
 
-      // ambient faster spin with pause on drag
+      // ambient spin control
       const mv = document.getElementById('my-model');
       let theta = 90;
       let spinning = true;
 
       mv.addEventListener('pointerdown', () => spinning = false);
-      mv.addEventListener('pointerup', () => spinning = true);
+      mv.addEventListener('pointerup', () => {
+        // read current orbit and extract azimuth
+        const orbit = mv.getCameraOrbit();         // "123deg 75deg 2.5m"
+        theta = parseFloat(orbit.split(' ')[0]);   // extract 123
+        spinning = true;
+      });
 
       function spin() {
         if (spinning) {
-          theta = (theta + 0.1) % 360;        // ~6°/s at 60fps
+          theta = (theta + 0.1) % 360;               // ~6°/s at 60fps
           mv.cameraOrbit = `${theta}deg 75deg 2.5m`;
           mv.jumpCameraToGoal();
         }
