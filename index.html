@@ -14,14 +14,13 @@
   <!-- Tailwind via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    // Custom Tailwind colors
     tailwind.config = {
       theme: {
         extend: {
           colors: {
             primary:    '#374151',
             accent:     '#10b981',
-            background: '#0f172a',
+            background: '#030314',  /* darker slate for space */
             text:       '#ffffff',
           }
         }
@@ -36,12 +35,12 @@
     body {
       margin: 0;
       overflow-x: hidden;
-      background: radial-gradient(ellipse at bottom, #0f172a 0%, #1e293b 100%);
+      background: radial-gradient(ellipse at bottom, #030314 0%, #0a0a25 100%);
       color: #ffffff;
       font-family: 'Roboto', sans-serif;
     }
     html { scroll-behavior: smooth; }
-    .pt-nav { padding-top: 4rem; } /* nav height = 4rem */
+    .pt-nav { padding-top: 4rem; }
     #starfield { position: fixed; inset: 0; z-index: -10; pointer-events: none; }
 
     @keyframes slideInUp {
@@ -67,25 +66,24 @@
     function resize(){ c.width = innerWidth; c.height = innerHeight; }
     window.addEventListener('resize', resize);
     resize();
-    for(let i = 0; i < N; i++){
+    for(let i=0;i<N;i++){
       stars.push({ x:Math.random()*c.width, y:Math.random()*c.height, r:Math.random()*1.2 });
     }
     (function draw(){
       ctx.clearRect(0,0,c.width,c.height);
       ctx.fillStyle = '#fff';
-      stars.forEach(s=>{
+      stars.forEach(s => {
         ctx.beginPath();
-        ctx.arc(s.x,s.y,s.r,0,2*Math.PI);
+        ctx.arc(s.x, s.y, s.r, 0, 2*Math.PI);
         ctx.fill();
       });
       requestAnimationFrame(draw);
     })();
   </script>
 
-  <!-- Fixed Navigation -->
+  <!-- Navigation -->
   <header class="fixed top-0 left-0 w-full h-16 bg-background/90 backdrop-blur z-50">
     <nav class="max-w-5xl mx-auto h-full flex items-center justify-between px-6 text-text">
-      <!-- Now plain white -->
       <h1 class="text-2xl">Liam Aero</h1>
       <ul class="flex space-x-6 uppercase text-sm">
         <li><a href="#hero" class="hover:text-accent">Home</a></li>
@@ -97,10 +95,10 @@
   </header>
 
   <div class="pt-16">
-
-    <!-- Hero: centered container -->
+    <!-- Hero with side-by-side 3D viewer -->
     <section id="hero" class="min-h-screen flex items-center justify-center px-4">
       <div class="max-w-5xl w-full flex flex-col-reverse md:flex-row items-center justify-between gap-8">
+        
         <!-- Intro Text -->
         <div class="w-full md:w-1/2 space-y-6 text-center md:text-left">
           <h1 class="text-6xl text-accent uppercase animate-on-scroll">Hi, I’m Liam</h1>
@@ -113,8 +111,13 @@
             View Projects
           </a>
         </div>
-        <!-- 3D Model Viewer -->
-        <div class="w-full md:w-1/2 flex justify-center">
+
+        <!-- 3D Model with glow -->
+        <div class="w-full md:w-1/2 flex justify-center relative">
+          <!-- glowing background -->
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-80 h-80 bg-accent/20 rounded-full filter blur-3xl"></div>
+          </div>
           <model-viewer
             src="assets/sensor_mount.glb"
             alt="3D model of my sensor mount"
@@ -123,7 +126,7 @@
             auto-rotate
             camera-orbit="90deg 75deg 2.5m"
             style="width:100%; max-width:400px; height:400px; background:transparent;"
-            class="animate-on-scroll"
+            class="animate-on-scroll relative z-10"
           ></model-viewer>
         </div>
       </div>
@@ -139,7 +142,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="bg-background/50 p-6 rounded-lg shadow-lg animate-on-scroll">
           <h3 class="text-2xl text-accent font-semibold mb-2">Mars Rover Drive Train</h3>
-          <p class="mb-4 text-text">
+          <p class="mb-4">
             Led structural redesign, reducing mass by 12% while boosting torque.
           </p>
           <a href="#" class="text-accent hover:underline">Learn more →</a>
@@ -173,7 +176,6 @@
         Say Hello
       </a>
     </section>
-
   </div>
 
   <!-- Intersection Observer for animations -->
