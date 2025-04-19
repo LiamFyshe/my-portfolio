@@ -40,7 +40,7 @@
       font-family: 'Roboto', sans-serif;
     }
     html { scroll-behavior: smooth; }
-    .pt-nav { padding-top: 2.5rem; } /* 40px */
+    .pt-nav { padding-top: 2.5rem; } /* 40px header offset */
     #starfield { position: fixed; inset: 0; z-index: -10; pointer-events: none; }
 
     @keyframes slideInUp {
@@ -65,8 +65,7 @@
     const c = document.getElementById('starfield'), ctx = c.getContext('2d');
     let stars = [], N = 200;
     function resize(){ c.width = innerWidth; c.height = innerHeight; }
-    window.addEventListener('resize', resize);
-    resize();
+    window.addEventListener('resize', resize); resize();
     for(let i=0;i<N;i++){
       stars.push({ x:Math.random()*c.width, y:Math.random()*c.height, r:Math.random()*1.2 });
     }
@@ -93,7 +92,7 @@
 
   <div class="pt-10"><!-- match header height -->
 
-    <!-- Hero -->
+    <!-- Hero Section -->
     <section id="hero" class="min-h-screen flex items-center justify-center px-4">
       <div class="max-w-5xl w-full flex flex-col-reverse md:flex-row items-center justify-between gap-6">
 
@@ -110,7 +109,7 @@
           </a>
         </div>
 
-        <!-- 3D Model + glow -->
+        <!-- 3D Model + Glow -->
         <div class="w-full md:w-1/2 flex justify-center relative">
           <div class="absolute inset-0 flex items-center justify-center">
             <div class="w-64 h-64 bg-accent/20 rounded-full filter blur-3xl"></div>
@@ -138,7 +137,7 @@
       </div>
     </section>
 
-    <!-- Projects -->
+    <!-- Projects Section -->
     <section id="projects"
       class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/20 border-t border-primary/30">
       <h2 class="text-5xl md:text-6xl text-accent mb-4 uppercase animate-on-scroll">Projects</h2>
@@ -154,7 +153,7 @@
       </div>
     </section>
 
-    <!-- About -->
+    <!-- About Section -->
     <section id="about"
       class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/20 border-t border-primary/30">
       <h2 class="text-5xl md:text-6xl text-accent mb-4 uppercase animate-on-scroll">About Me</h2>
@@ -168,7 +167,7 @@
       </a>
     </section>
 
-    <!-- Contact -->
+    <!-- Contact Section -->
     <section id="contact"
       class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/20 border-t border-primary/30">
       <h2 class="text-5xl md:text-6xl text-accent mb-4 uppercase animate-on-scroll">Get In Touch</h2>
@@ -180,13 +179,12 @@
         Say Hello
       </a>
     </section>
-
   </div>
 
   <!-- Scripts -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // scroll-triggered animations
+      // Scroll-triggered animations
       const obs = new IntersectionObserver(entries => {
         entries.forEach(e => {
           if (e.isIntersecting) {
@@ -197,18 +195,21 @@
       }, { threshold: 0.15 });
       document.querySelectorAll('.animate-on-scroll').forEach(el => obs.observe(el));
 
-      // ambient spin with correct resume
+      // Ambient spin that correctly resumes
       const mv = document.getElementById('my-model');
-      let theta = 90, phi = 75, radius = 2.5, spinning = true;
+      let theta = 90, phi = 75, radius = 2.5;
+      let spinning = true;
 
       mv.addEventListener('pointerdown', () => spinning = false);
-      mv.addEventListener('pointerup', () => {
-        // get updated cameraOrbit vector [thetaRad, phiRad, rad]
-        const [t, p, r] = mv.getCameraOrbit();
-        theta = t * 180 / Math.PI;
-        phi = p * 180 / Math.PI;
-        radius = r;
-        spinning = true;
+      // listen on window so pointerup always fires
+      window.addEventListener('pointerup', () => {
+        if (!spinning) {
+          const [tRad, pRad, r] = mv.getCameraOrbit(); 
+          theta  = tRad * 180 / Math.PI;
+          phi    = pRad * 180 / Math.PI;
+          radius = r;
+          spinning = true;
+        }
       });
 
       function spin() {
