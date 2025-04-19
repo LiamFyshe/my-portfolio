@@ -87,7 +87,7 @@
     </nav>
   </header>
 
-  <div class="pt-10"><!-- match 40px header -->
+  <div class="pt-10"><!-- match header height -->
 
     <!-- Hero Section -->
     <section id="hero" class="min-h-screen flex items-center justify-center px-4">
@@ -111,6 +111,8 @@
           <div class="absolute inset-0 flex items-center justify-center">
             <div class="w-64 h-64 bg-accent/20 rounded-full filter blur-3xl"></div>
           </div>
+
+          <!-- Correctly closed model-viewer tag -->
           <model-viewer
             id="my-model"
             src="assets/sensor_mount.glb"
@@ -119,18 +121,21 @@
             camera-controls
             auto-rotate
             auto-rotate-delay="0"
-            auto-rotate-speed="-0.75"  <!-- negative for CCW, a bit faster -->
+            auto-rotate-speed="-0.75"
             exposure="0.3"
             shadow-intensity="0.7"
             interaction-prompt="auto"
             camera-orbit="90deg 75deg 2.5m"
             style="
-              width:100%;max-width:360px;height:360px;
-              mask-image:linear-gradient(to bottom,transparent 0%,black 20%,black 80%,transparent 100%);
-              -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 20%,black 80%,transparent 100%);
+              width:100%;
+              max-width:360px;
+              height:360px;
+              mask-image: linear-gradient(to bottom,transparent 0%,black 20%,black 80%,transparent 100%);
+              -webkit-mask-image: linear-gradient(to bottom,transparent 0%,black 20%,black 80%,transparent 100%);
             "
             class="animate-on-scroll relative z-10">
           </model-viewer>
+
           <div class="drag-hint animate-on-scroll">Drag to rotate ↔︎</div>
         </div>
       </div>
@@ -175,7 +180,7 @@
     </section>
   </div>
 
-  <!-- Scripts -->
+  <!-- Pause/play on drag handlers -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // scroll-triggered reveals
