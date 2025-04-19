@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Liam’s Aero Portfolio</title>
 
   <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;500&display=swap"
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;500&display=swap" 
     rel="stylesheet"
   />
 
@@ -20,7 +20,7 @@
           colors: {
             primary:    '#1e40af',
             accent:     '#3b82f6',
-            background: '#000014', /* deep night for starfield */
+            background: '#000014',
             text:       '#f1f5f9',
           }
         }
@@ -28,108 +28,112 @@
     }
   </script>
 
-  <!-- Custom styles: starfield + animations + fonts -->
+  <!-- Custom CSS -->
   <style>
-    /* Starfield canvas covers the entire screen */
-    body { margin: 0; overflow: hidden; }
+    /* Global scroll‑snap + smooth scroll */
+    html {
+      scroll-behavior: smooth;
+      scroll-snap-type: y mandatory;
+    }
+    section {
+      scroll-snap-align: start;
+    }
+    /* Starfield */
+    body { margin:0; overflow-x:hidden; background:#000014; color:#f1f5f9; }
     #starfield {
-      position: fixed;
-      inset: 0;
-      z-index: -10;
+      position: fixed; inset:0; z-index:-10;
       background: #000014;
     }
-
-    /* Fade‑in animations */
+    /* Animations */
     @keyframes fadeInUp {
-      0%   { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
+      0% { opacity:0; transform: translateY(20px); }
+      100% { opacity:1; transform: translateY(0); }
     }
-    .fade-in-up {
-      opacity: 0;
-      animation: fadeInUp 1s ease-out forwards;
-    }
+    .fade-in-up { opacity:0; animation: fadeInUp 1s ease-out forwards; }
     .delay-200 { animation-delay: 0.2s; }
     .delay-400 { animation-delay: 0.4s; }
+    /* Fonts */
+    body, p, a, ul li a { font-family:'Roboto',sans-serif; }
+    h1,h2,nav h1 { font-family:'Bebas Neue',cursive; letter-spacing:0.05em; }
 
-    /* Font overrides */
-    body, p, a, nav ul li a {
-      font-family: 'Roboto', sans-serif;
-      color: #f1f5f9;
-    }
-    h1, h2, h3, nav h1 {
-      font-family: 'Orbitron', sans-serif;
-    }
+    /* Section styling */
+    section { height:100vh; display:flex; justify-content:center; align-items:center; }
+    /* Projects placeholder */
+    #projects { background: #11121a; }
+    /* About placeholder */
+    #about    { background: #181826; }
   </style>
 </head>
 
-<body class="bg-background text-text">
-  <!-- Starfield Canvas -->
+<body>
+  <!-- Starfield -->
   <canvas id="starfield"></canvas>
+  <script>
+    const c = document.getElementById('starfield'),
+          ctx = c.getContext('2d');
+    let stars = [], N=250;
+    function resize(){ c.width=innerWidth; c.height=innerHeight; }
+    window.addEventListener('resize',resize); resize();
+    for(let i=0;i<N;i++){
+      stars.push({ x: Math.random()*c.width, y: Math.random()*c.height, r: Math.random()*1.5 });
+    }
+    (function draw(){
+      ctx.clearRect(0,0,c.width,c.height);
+      ctx.fillStyle='#fff';
+      stars.forEach(s=>{
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.r,0,2*Math.PI);
+        ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    })();
+  </script>
 
-  <!-- Navigation -->
-  <header class="bg-primary text-white p-4 fade-in-up delay-200">
-    <nav class="max-w-3xl mx-auto flex justify-between">
-      <h1 class="text-2xl font-bold">Liam Aero</h1>
-      <ul class="flex space-x-4">
-        <li><a href="#" class="hover:text-accent">Home</a></li>
-        <li><a href="#projects" class="hover:text-accent">Projects</a></li>
-        <li><a href="#about" class="hover:text-accent">About</a></li>
+  <!-- Nav -->
+  <header class="fixed top-0 w-full bg-primary/60 backdrop-blur-sm z-50 fade-in-up delay-200">
+    <nav class="max-w-5xl mx-auto flex justify-between items-center p-4 text-white">
+      <h1 class="text-2xl">Liam Aero</h1>
+      <ul class="flex space-x-6 uppercase text-sm">
+        <li><a href="#hero"    class="hover:text-accent">Home</a></li>
+        <li><a href="#projects"class="hover:text-accent">Projects</a></li>
+        <li><a href="#about"   class="hover:text-accent">About</a></li>
         <li><a href="#contact" class="hover:text-accent">Contact</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- Hero Section -->
-  <main class="min-h-screen flex flex-col items-center justify-center px-4 fade-in-up delay-400">
-    <h1 class="text-5xl font-bold text-primary mb-4">
-      Welcome to Liam’s Aero Portfolio
-    </h1>
-    <p class="text-xl max-w-xl text-center mb-6">
-      Engineering space systems, one project at a time.
-    </p>
-    <a href="#projects" class="px-6 py-3 bg-accent text-white rounded hover:bg-accent/90">
+  <!-- Hero -->
+  <section id="hero" class="relative flex flex-col items-center justify-center px-4 fade-in-up delay-400">
+    <h1 class="text-6xl text-primary mb-2 uppercase">Upcoming Launch</h1>
+    <h2 class="text-7xl text-white font-bold mb-6 uppercase">NROL‑145 MISSION</h2>
+    <p class="text-xl max-w-2xl text-center mb-8">Engineering space systems, one project at a time.</p>
+    <a href="#projects" class="px-8 py-4 bg-accent text-white rounded hover:bg-accent/90 uppercase tracking-wide">
       View Projects
     </a>
-  </main>
+  </section>
 
-  <!-- Future sections… -->
-  <!-- <section id="projects">…</section> -->
-  <!-- <section id="about">…</section> -->
-  <!-- <section id="contact">…</section> -->
+  <!-- Projects Placeholder -->
+  <section id="projects" class="flex flex-col items-center justify-center text-center px-4">
+    <h2 class="text-5xl text-accent font-bold mb-4 uppercase">Projects</h2>
+    <p class="text-lg max-w-xl text-text mb-6">Your standout engineering work will go here—case studies, 3D models, metrics.</p>
+    <a href="#" class="px-6 py-3 bg-primary text-white rounded hover:bg-primary/90 uppercase">See Details</a>
+  </section>
 
-  <!-- Starfield Animation Script -->
-  <script>
-    const canvas = document.getElementById('starfield');
-    const ctx = canvas.getContext('2d');
-    let stars = [];
-    const numStars = 200;
+  <!-- About Placeholder -->
+  <section id="about" class="flex flex-col items-center justify-center text-center px-4">
+    <h2 class="text-5xl text-accent font-bold mb-4 uppercase">About Me</h2>
+    <p class="text-lg max-w-xl text-text mb-6">
+      Mechanical & Aerospace Engineering student at McMaster University, 
+      rover‑team enthusiast, and space technology aficionado.
+    </p>
+    <a href="#" class="px-6 py-3 bg-primary text-white rounded hover:bg-primary/90 uppercase">Learn More</a>
+  </section>
 
-    function resize() {
-      canvas.width = innerWidth;
-      canvas.height = innerHeight;
-    }
-    window.addEventListener('resize', resize);
-    resize();
-
-    for (let i = 0; i < numStars; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 1.2,
-      });
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#fff';
-      stars.forEach(s => {
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI);
-        ctx.fill();
-      });
-      requestAnimationFrame(draw);
-    }
-    draw();
-  </script>
+  <!-- Contact Placeholder -->
+  <section id="contact" class="flex flex-col items-center justify-center text-center px-4">
+    <h2 class="text-5xl text-accent font-bold mb-4 uppercase">Get In Touch</h2>
+    <p class="text-lg max-w-xl text-text mb-6">Ready to collaborate on the next space mission? Let’s talk.</p>
+    <a href="mailto:your.email@example.com" class="px-6 py-3 bg-primary text-white rounded hover:bg-primary/90 uppercase">Email Me</a>
+  </section>
 </body>
 </html>
