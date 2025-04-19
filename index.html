@@ -28,7 +28,7 @@
     }
   </script>
 
-  <!-- model-viewer web component -->
+  <!-- model-viewer component -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
   <style>
@@ -38,19 +38,23 @@
       color: #fff; font-family: 'Roboto', sans-serif;
     }
     html { scroll-behavior: smooth; }
-    .pt-nav { padding-top: 2.5rem; } /* 40px header offset */
+    .pt-nav { padding-top: 2.5rem; } /* 40px header */
     #starfield { position: fixed; inset: 0; z-index: -10; pointer-events: none; }
 
     @keyframes slideInUp {
-      0% { opacity:0; transform:translateY(20px); }
-      100% { opacity:1; transform:translateY(0); }
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
-    .animate-on-scroll { opacity:0; transform:translateY(20px); }
+    .animate-on-scroll { opacity: 0; transform: translateY(20px); }
     .animate { animation: slideInUp 0.8s ease-out forwards; }
 
-    h1,h2,nav h1 { font-family:'Bebas Neue', cursive; letter-spacing:0.05em; }
-    section { padding:1.5rem 0; }
+    h1,h2,nav h1 {
+      font-family: 'Bebas Neue', cursive;
+      letter-spacing: 0.05em;
+    }
+    section { padding: 1.5rem 0; }
 
+    /* model-viewer affordances */
     model-viewer {
       cursor: grab;
       background: transparent;
@@ -65,21 +69,25 @@
   </style>
 </head>
 <body class="pt-nav">
-
   <!-- Starfield -->
   <canvas id="starfield"></canvas>
   <script>
     const c = document.getElementById('starfield'), ctx = c.getContext('2d');
     let stars = [], N = 200;
     function resize() { c.width = innerWidth; c.height = innerHeight; }
-    window.addEventListener('resize', resize); resize();
+    window.addEventListener('resize', resize);
+    resize();
     for (let i = 0; i < N; i++) {
       stars.push({ x: Math.random() * c.width, y: Math.random() * c.height, r: Math.random() * 1.2 });
     }
-    (function draw() {
-      ctx.clearRect(0, 0, c.width, c.height);
+    (function draw(){
+      ctx.clearRect(0,0,c.width,c.height);
       ctx.fillStyle = '#fff';
-      stars.forEach(s => { ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI); ctx.fill(); });
+      stars.forEach(s => {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, 2*Math.PI);
+        ctx.fill();
+      });
       requestAnimationFrame(draw);
     })();
   </script>
@@ -103,7 +111,7 @@
     <section id="hero" class="min-h-screen flex items-center justify-center px-4">
       <div class="max-w-5xl w-full flex flex-col-reverse md:flex-row items-center justify-between gap-6">
 
-        <!-- Intro Text -->
+        <!-- Intro -->
         <div class="w-full md:w-1/2 space-y-4 text-center md:text-left">
           <h1 class="text-5xl md:text-6xl text-accent uppercase animate-on-scroll">Hi, I’m Liam</h1>
           <p class="text-lg max-w-md animate-on-scroll">
@@ -122,28 +130,25 @@
             <div class="w-64 h-64 bg-accent/20 rounded-full filter blur-3xl"></div>
           </div>
 
+          <!-- Properly closed model-viewer -->
           <model-viewer
             id="my-model"
             src="assets/sensor_mount.glb"
             alt="3D model of sensor mount"
             ar
             camera-controls
-            auto-rotate
-            auto-rotate-delay="0"
-            auto-rotate-speed="-1"     <!-- a bit faster CCW -->
             exposure="0.3"
             shadow-intensity="0.7"
-            interaction-prompt="auto"
             camera-orbit="90deg 75deg 2.5m"
+            interaction-prompt="auto"
             style="
               width:100%;
               max-width:360px;
               height:360px;
               mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
               -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
-            "
-            class="animate-on-scroll relative z-10"
-          ></model-viewer>
+            ">
+          </model-viewer>
 
           <div class="drag-hint animate-on-scroll">Drag to rotate ↔︎</div>
         </div>
@@ -189,10 +194,10 @@
     </section>
   </div>
 
-  <!-- Pause/play on drag -->
+  <!-- Pause/play handlers -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // scroll reveals
+      // scroll-triggered reveals
       const obs = new IntersectionObserver(entries => {
         entries.forEach(e => {
           if (e.isIntersecting) {
@@ -203,8 +208,13 @@
       }, { threshold: 0.15 });
       document.querySelectorAll('.animate-on-scroll').forEach(el => obs.observe(el));
 
-      // pause/resume auto-rotate cleanly
+      // built‑in auto-rotate with pause/resume
       const mv = document.getElementById('my-model');
+      // ramp up CCW speed after load
+      mv.addEventListener('load', () => {
+        mv.autoRotate = true;
+        mv.autoRotateSpeed = -1;  // CCW, faster
+      });
       mv.addEventListener('pointerdown', () => mv.pause());
       window.addEventListener('pointerup',   () => mv.play());
     });
