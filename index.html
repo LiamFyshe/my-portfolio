@@ -91,7 +91,7 @@
     </nav>
   </header>
 
-  <div class="pt-10"><!-- match 40px header -->
+  <div class="pt-10"><!-- match header height -->
 
     <!-- Hero -->
     <section id="hero" class="min-h-screen flex items-center justify-center px-4">
@@ -141,13 +141,13 @@
     <!-- Projects -->
     <section id="projects"
       class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/20 border-t border-primary/30">
-      <h2 class="text-4xl md:text-5xl text-accent mb-4 uppercase animate-on-scroll">Projects</h2>
-      <p class="text-base md:text-lg max-w-3xl text-center mb-8 animate-on-scroll">
+      <h2 class="text-5xl md:text-6xl text-accent mb-4 uppercase animate-on-scroll">Projects</h2>
+      <p class="text-lg max-w-3xl text-center mb-8 animate-on-scroll">
         Explore my hands‑on work: rover subsystems, CFD studies, rapid prototyping case studies.
       </p>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="bg-background/50 p-4 md:p-6 rounded-lg shadow-lg animate-on-scroll">
-          <h3 class="text-xl md:text-2xl text-accent font-semibold mb-2">Mars Rover Drive Train</h3>
+          <h3 class="text-2xl text-accent font-semibold mb-2">Mars Rover Drive Train</h3>
           <p class="mb-4">Led structural redesign, reducing mass by 12% while boosting torque.</p>
           <a href="#" class="text-accent hover:underline">Learn more →</a>
         </div>
@@ -157,8 +157,8 @@
     <!-- About -->
     <section id="about"
       class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/20 border-t border-primary/30">
-      <h2 class="text-4xl md:text-5xl text-accent mb-4 uppercase animate-on-scroll">About Me</h2>
-      <p class="text-base md:text-lg max-w-3xl text-center mb-8 animate-on-scroll">
+      <h2 class="text-5xl md:text-6xl text-accent mb-4 uppercase animate-on-scroll">About Me</h2>
+      <p class="text-lg max-w-3xl text-center mb-8 animate-on-scroll">
         Second‑year Mechanical & Aerospace Engineering student at McMaster University.<br/>
         Mars rover team member, CAD enthusiast, and Python developer.
       </p>
@@ -171,8 +171,8 @@
     <!-- Contact -->
     <section id="contact"
       class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/20 border-t border-primary/30">
-      <h2 class="text-4xl md:text-5xl text-accent mb-4 uppercase animate-on-scroll">Get In Touch</h2>
-      <p class="text-base md:text-lg max-w-3xl text-center mb-8 animate-on-scroll">
+      <h2 class="text-5xl md:text-6xl text-accent mb-4 uppercase animate-on-scroll">Get In Touch</h2>
+      <p class="text-lg max-w-3xl text-center mb-8 animate-on-scroll">
         Let’s discuss how I can help your team reach new heights in aerospace engineering.
       </p>
       <a href="mailto:your.email@example.com"
@@ -180,6 +180,7 @@
         Say Hello
       </a>
     </section>
+
   </div>
 
   <!-- Scripts -->
@@ -196,22 +197,24 @@
       }, { threshold: 0.15 });
       document.querySelectorAll('.animate-on-scroll').forEach(el => obs.observe(el));
 
-      // ambient spin that resumes from user release
+      // ambient spin with correct resume
       const mv = document.getElementById('my-model');
-      let theta = 90, spinning = true;
+      let theta = 90, phi = 75, radius = 2.5, spinning = true;
 
       mv.addEventListener('pointerdown', () => spinning = false);
       mv.addEventListener('pointerup', () => {
-        // use getCameraOrbit() to read true current angles (in radians)
-        const orbit = mv.getCameraOrbit();            // Vector3: [azimuth, elevation, radius]
-        theta = orbit.x * 180 / Math.PI;             // convert rad→deg
+        // get updated cameraOrbit vector [thetaRad, phiRad, rad]
+        const [t, p, r] = mv.getCameraOrbit();
+        theta = t * 180 / Math.PI;
+        phi = p * 180 / Math.PI;
+        radius = r;
         spinning = true;
       });
 
       function spin() {
         if (spinning) {
-          theta = (theta + 0.1) % 360;                // ~6°/s
-          mv.cameraOrbit = `${theta}deg 75deg 2.5m`;
+          theta = (theta + 0.1) % 360;  // ~6°/s
+          mv.cameraOrbit = `${theta}deg ${phi}deg ${radius}m`;
           mv.jumpCameraToGoal();
         }
         requestAnimationFrame(spin);
