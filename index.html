@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Liam’s Aerospace Portfolio</title>
 
@@ -28,7 +28,7 @@
     }
   </script>
 
-  <!-- model-viewer web component -->
+  <!-- model-viewer component -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
   <style>
@@ -40,7 +40,7 @@
       font-family: 'Roboto', sans-serif;
     }
     html { scroll-behavior: smooth; }
-    .pt-nav { padding-top: 2.5rem; } /* header = 2.5rem (40px) */
+    .pt-nav { padding-top: 2.5rem; } /* 40px */
     #starfield { position: fixed; inset: 0; z-index: -10; pointer-events: none; }
 
     @keyframes slideInUp {
@@ -50,7 +50,7 @@
     .animate-on-scroll { opacity: 0; transform: translateY(20px); }
     .animate { animation: slideInUp 0.8s ease-out forwards; }
 
-    h1, h2, nav h1 {
+    h1,h2,nav h1 {
       font-family: 'Bebas Neue', cursive;
       letter-spacing: 0.05em;
     }
@@ -58,9 +58,8 @@
     section { padding-top: 1.5rem; padding-bottom: 1.5rem; }
   </style>
 </head>
-
 <body class="pt-nav">
-  <!-- Starfield Canvas -->
+  <!-- Starfield -->
   <canvas id="starfield"></canvas>
   <script>
     const c = document.getElementById('starfield'), ctx = c.getContext('2d');
@@ -92,7 +91,7 @@
     </nav>
   </header>
 
-  <div class="pt-10"><!-- match header height -->
+  <div class="pt-10"><!-- match 40px header -->
 
     <!-- Hero -->
     <section id="hero" class="min-h-screen flex items-center justify-center px-4">
@@ -149,9 +148,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="bg-background/50 p-4 md:p-6 rounded-lg shadow-lg animate-on-scroll">
           <h3 class="text-xl md:text-2xl text-accent font-semibold mb-2">Mars Rover Drive Train</h3>
-          <p class="mb-4 text-text">
-            Led structural redesign, reducing mass by 12% while boosting torque.
-          </p>
+          <p class="mb-4">Led structural redesign, reducing mass by 12% while boosting torque.</p>
           <a href="#" class="text-accent hover:underline">Learn more →</a>
         </div>
       </div>
@@ -199,21 +196,21 @@
       }, { threshold: 0.15 });
       document.querySelectorAll('.animate-on-scroll').forEach(el => obs.observe(el));
 
-      // ambient spin with resume from user angle
+      // ambient spin that resumes from user release
       const mv = document.getElementById('my-model');
       let theta = 90, spinning = true;
 
       mv.addEventListener('pointerdown', () => spinning = false);
       mv.addEventListener('pointerup', () => {
-        // resume from current azimuth
-        const orbit = mv.cameraOrbit.split(' ')[0]; 
-        theta = parseFloat(orbit);
+        // use getCameraOrbit() to read true current angles (in radians)
+        const orbit = mv.getCameraOrbit();            // Vector3: [azimuth, elevation, radius]
+        theta = orbit.x * 180 / Math.PI;             // convert rad→deg
         spinning = true;
       });
 
       function spin() {
         if (spinning) {
-          theta = (theta + 0.1) % 360;  // ~6°/s at 60fps
+          theta = (theta + 0.1) % 360;                // ~6°/s
           mv.cameraOrbit = `${theta}deg 75deg 2.5m`;
           mv.jumpCameraToGoal();
         }
