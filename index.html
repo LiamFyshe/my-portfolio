@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liam’s Aero Portfolio</title>
+  <!-- Tailwind via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Optional: configure your custom colors -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary:    '#1e40af',
+            accent:     '#3b82f6',
+            background: '#f1f5f9',
+            text:       '#1f2937',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background text-text">
+  <header class="bg-primary text-white p-4">
+    <nav class="max-w-3xl mx-auto flex justify-between">
+      <h1 class="text-2xl font-bold">Liam Aero</h1>
+      <ul class="flex space-x-4">
+        <li><a href="#" class="hover:text-accent">Home</a></li>
+        <li><a href="#projects" class="hover:text-accent">Projects</a></li>
+        <li><a href="#about" class="hover:text-accent">About</a></li>
+        <li><a href="#contact" class="hover:text-accent">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="min-h-screen flex flex-col items-center justify-center px-4">
+    <h1 class="text-5xl font-extrabold text-primary mb-4">
+      Welcome to Liam’s Aero Portfolio
+    </h1>
+    <p class="text-xl max-w-xl text-center mb-6">
+      Engineering space systems, one project at a time.
+    </p>
+    <a href="#projects"
+       class="px-6 py-3 bg-accent text-white rounded hover:bg-accent/90">
+      View Projects
+    </a>
+  </main>
+
+  <!-- Add new sections (Projects, About, Contact) below -->
+
+</body>
+</html>
