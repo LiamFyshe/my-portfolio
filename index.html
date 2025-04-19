@@ -22,6 +22,23 @@
     }
   </script>
 </head>
+    <!-- Tailwind via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Custom page‑load animations -->
+  <style>
+    @keyframes fadeInUp {
+      0%   { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in-up {
+      opacity: 0;
+      animation: fadeInUp 1s ease-out forwards;
+    }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-400 { animation-delay: 0.4s; }
+  </style>
 <body class="bg-background text-text">
   <header class="bg-primary text-white p-4">
     <nav class="max-w-3xl mx-auto flex justify-between">
@@ -34,7 +51,15 @@
       </ul>
     </nav>
   </header>
+<body class="bg-background text-text">
+  <header class="bg-primary text-white p-4 fade-in-up delay-200">
+    <!-- …nav… -->
+  </header>
 
+  <main class="min-h-screen flex flex-col items-center justify-center px-4 fade-in-up delay-400">
+    <!-- …hero content… -->
+  </main>
+</body>
   <main class="min-h-screen flex flex-col items-center justify-center px-4">
     <h1 class="text-5xl font-extrabold text-primary mb-4">
       Welcome to Liam’s Aero Portfolio
