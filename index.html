@@ -14,6 +14,7 @@
   <!-- Tailwind via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
+    // Custom Tailwind colors
     tailwind.config = {
       theme: {
         extend: {
@@ -28,8 +29,11 @@
     }
   </script>
 
+  <!-- model-viewer web component -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
   <style>
-    /* Full‑page gradient underlay */
+    /* Gradient background underlay */
     body {
       margin: 0;
       overflow-x: hidden;
@@ -37,24 +41,17 @@
       color: #ffffff;
       font-family: 'Roboto', sans-serif;
     }
-
-    /* Transparent starfield over gradient */
+    /* Smooth scroll */
+    html { scroll-behavior: smooth; }
+    /* Fixed nav offset */
+    .pt-nav { padding-top: 4rem; } /* nav height = 4rem (64px) */
+    /* Transparent starfield canvas */
     #starfield {
-      position: fixed; inset: 0; z-index: -10;
+      position: fixed;
+      inset: 0;
+      z-index: -10;
       pointer-events: none;
     }
-    html { scroll-behavior: smooth; }
-
-    /* Floating rocket */
-    @keyframes float {
-      0%,100% { transform: translateY(0); }
-      50%     { transform: translateY(-8px); }
-    }
-    .animate-float {
-      display: inline-block;
-      animation: float 3s ease-in-out infinite;
-    }
-
     /* Slide‑in on scroll */
     @keyframes slideInUp {
       0%   { opacity: 0; transform: translateY(20px); }
@@ -67,8 +64,7 @@
     .animate {
       animation: slideInUp 0.8s ease-out forwards;
     }
-
-    /* Headings font */
+    /* Heading font */
     h1, h2, nav h1 {
       font-family: 'Bebas Neue', cursive;
       letter-spacing: 0.05em;
@@ -76,12 +72,13 @@
   </style>
 </head>
 
-<body>
+<body class="pt-nav">
   <!-- Starfield Canvas -->
   <canvas id="starfield"></canvas>
   <script>
+    // Draw simple starfield
     const canvas = document.getElementById('starfield'),
-          ctx    = canvas.getContext('2d');
+          ctx = canvas.getContext('2d');
     let stars = [], N = 200;
     function resize() {
       canvas.width  = innerWidth;
@@ -97,7 +94,7 @@
       });
     }
     (function draw() {
-      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = '#fff';
       stars.forEach(s => {
         ctx.beginPath();
@@ -108,12 +105,13 @@
     })();
   </script>
 
-  <!-- Fixed Nav -->
+  <!-- Fixed Navigation -->
   <header class="fixed top-0 left-0 w-full h-16 bg-primary/80 backdrop-blur z-50">
     <nav class="max-w-5xl mx-auto h-full flex items-center justify-between px-6 text-text">
       <h1 class="text-2xl">Liam Aero</h1>
       <ul class="flex space-x-6 uppercase text-sm">
         <li><a href="#hero" class="hover:text-accent">Home</a></li>
+        <li><a href="#viewer" class="hover:text-accent">3D Model</a></li>
         <li><a href="#projects" class="hover:text-accent">Projects</a></li>
         <li><a href="#about" class="hover:text-accent">About</a></li>
         <li><a href="#contact" class="hover:text-accent">Contact</a></li>
@@ -121,28 +119,39 @@
     </nav>
   </header>
 
-  <!-- Push content below nav -->
   <div class="pt-16">
-
     <!-- Hero Section -->
     <section id="hero" class="min-h-screen flex flex-col items-center justify-center text-center px-4">
-      <h1 class="text-6xl text-accent mb-4 uppercase animate-on-scroll">
-        Hi, I’m Liam 
-        <span class="animate-float">🚀</span>
-      </h1>
+      <h1 class="text-6xl text-accent mb-4 uppercase animate-on-scroll">Hi, I’m Liam</h1>
       <p class="text-xl max-w-2xl mb-6 animate-on-scroll">
         Aerospace Engineering student at McMaster University,<br/>
         passionate about space systems, rover design, and prototyping.
       </p>
-      <a href="#projects"
+      <a href="#viewer"
          class="px-8 py-4 bg-accent text-background rounded-full uppercase tracking-wider animate-on-scroll">
-        View Projects
+        View 3D Model
       </a>
     </section>
 
-    <!-- Projects Section (full‑screen) -->
-    <section id="projects"
-      class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/20 border-t border-primary/30">
+    <!-- 3D Model Viewer Section -->
+    <section id="viewer" class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/20 border-t border-primary/30">
+      <h2 class="text-5xl text-accent mb-6 uppercase animate-on-scroll">Interactive 3D Model</h2>
+      <model-viewer
+        src="assets/mount.glb"
+        alt="3D model of my sensor mount"
+        ar
+        camera-controls
+        auto-rotate
+        style="width:100%; max-width:600px; height:60vh; background:transparent;"
+        class="animate-on-scroll">
+      </model-viewer>
+      <p class="text-lg max-w-3xl text-center mt-6 text-text animate-on-scroll">
+        Rotate, pan, and zoom to explore the sensor mount design in 3D.
+      </p>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/30 border-t border-primary/30">
       <h2 class="text-5xl text-accent mb-6 uppercase animate-on-scroll">Projects</h2>
       <p class="text-lg max-w-3xl text-center mb-10 text-text animate-on-scroll">
         Explore my hands‑on work: rover subsystems, CFD studies, rapid prototyping case studies.
@@ -156,13 +165,12 @@
           </p>
           <a href="#" class="text-accent hover:underline">Learn more →</a>
         </div>
-        <!-- Add more cards as needed -->
+        <!-- Add more cards here -->
       </div>
     </section>
 
-    <!-- About Section (full‑screen) -->
-    <section id="about"
-      class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/30 border-t border-primary/30">
+    <!-- About Section -->
+    <section id="about" class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/20 border-t border-primary/30">
       <h2 class="text-5xl text-accent mb-6 uppercase animate-on-scroll">About Me</h2>
       <p class="text-lg max-w-3xl text-center mb-6 text-text animate-on-scroll">
         As a second‑year Mechanical & Aerospace Engineering student,<br/>
@@ -175,34 +183,31 @@
       </a>
     </section>
 
-    <!-- Contact Section (full‑screen) -->
-    <section id="contact"
-      class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/20 border-t border-primary/30">
+    <!-- Contact Section -->
+    <section id="contact" class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/30 border-t border-primary/30">
       <h2 class="text-5xl text-accent mb-6 uppercase animate-on-scroll">Get In Touch</h2>
       <p class="text-lg max-w-3xl text-center mb-6 text-text animate-on-scroll">
-        I’m always excited to collaborate on aerospace projects.<br/>
-        Let’s discuss how I can help your team reach new heights!
+        Let’s discuss how I can help your team reach new heights in aerospace engineering.
       </p>
       <a href="mailto:your.email@example.com"
          class="px-6 py-3 bg-accent text-background rounded-full uppercase animate-on-scroll">
         Say Hello
       </a>
     </section>
-
   </div>
 
-  <!-- Intersection Observer for scroll animations -->
+  <!-- Intersection Observer for animations -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const obs = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.add('animate');
-            obs.unobserve(e.target);
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate');
+            observer.unobserve(entry.target);
           }
         });
       }, { threshold: 0.15 });
-      document.querySelectorAll('.animate-on-scroll').forEach(el => obs.observe(el));
+      document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
     });
   </script>
 </body>
