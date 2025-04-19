@@ -65,7 +65,7 @@
     let stars = [], N = 200;
     function resize(){ c.width=innerWidth; c.height=innerHeight; }
     window.addEventListener('resize', resize); resize();
-    for(let i=0; i<N; i++){
+    for(let i=0;i<N;i++){
       stars.push({ x:Math.random()*c.width, y:Math.random()*c.height, r:Math.random()*1.2 });
     }
     (function draw(){
@@ -174,14 +174,13 @@
         Let’s discuss how I can help your team reach new heights in aerospace engineering.
       </p>
       <a href="mailto:your.email@example.com"
-         class="px-6 py-3 bg-accent text-background rounded-full uppercase animate-on-scroll">
+         class="px-6 py-3 bg-accent text-background rounded-full animate-on-scroll">
         Say Hello
       </a>
     </section>
-
   </div>
 
-  <!-- Intersection Observer -->
+  <!-- Scripts -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // scroll-triggered animations
@@ -195,17 +194,25 @@
       }, { threshold: 0.15 });
       document.querySelectorAll('.animate-on-scroll').forEach(el => obs.observe(el));
 
-      // ambient slow spin
+      // ambient faster spin with pause on drag
       const mv = document.getElementById('my-model');
-      let theta = 90; // start at 90deg
+      let theta = 90;
+      let spinning = true;
+
+      mv.addEventListener('pointerdown', () => spinning = false);
+      mv.addEventListener('pointerup', () => spinning = true);
+
       function spin() {
-        theta = (theta + 0.02) % 360;         // ~1.2deg/s at 60fps
-        mv.cameraOrbit = `${theta}deg 75deg 2.5m`;
-        mv.jumpCameraToGoal();
+        if (spinning) {
+          theta = (theta + 0.1) % 360;        // ~6°/s at 60fps
+          mv.cameraOrbit = `${theta}deg 75deg 2.5m`;
+          mv.jumpCameraToGoal();
+        }
         requestAnimationFrame(spin);
       }
+
       mv.addEventListener('load', () => {
-        mv.interactionPrompt = 'none';        // disable click-to-interact prompt
+        mv.interactionPrompt = 'none';
         spin();
       });
     });
