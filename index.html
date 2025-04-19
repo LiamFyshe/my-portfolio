@@ -14,6 +14,7 @@
   <!-- Tailwind via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
+    // Custom Tailwind colors
     tailwind.config = {
       theme: {
         extend: {
@@ -66,15 +67,15 @@
     function resize(){ c.width = innerWidth; c.height = innerHeight; }
     window.addEventListener('resize', resize);
     resize();
-    for (let i=0; i<N; i++) {
-      stars.push({ x: Math.random()*c.width, y: Math.random()*c.height, r: Math.random()*1.2 });
+    for(let i = 0; i < N; i++){
+      stars.push({ x:Math.random()*c.width, y:Math.random()*c.height, r:Math.random()*1.2 });
     }
     (function draw(){
       ctx.clearRect(0,0,c.width,c.height);
       ctx.fillStyle = '#fff';
-      stars.forEach(s => { 
+      stars.forEach(s=>{
         ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, 2*Math.PI);
+        ctx.arc(s.x,s.y,s.r,0,2*Math.PI);
         ctx.fill();
       });
       requestAnimationFrame(draw);
@@ -82,8 +83,9 @@
   </script>
 
   <!-- Fixed Navigation -->
-  <header class="fixed top-0 left-0 w-full h-16 bg-primary/80 backdrop-blur z-50">
+  <header class="fixed top-0 left-0 w-full h-16 bg-background/90 backdrop-blur z-50">
     <nav class="max-w-5xl mx-auto h-full flex items-center justify-between px-6 text-text">
+      <!-- Now plain white -->
       <h1 class="text-2xl">Liam Aero</h1>
       <ul class="flex space-x-6 uppercase text-sm">
         <li><a href="#hero" class="hover:text-accent">Home</a></li>
@@ -96,35 +98,34 @@
 
   <div class="pt-16">
 
-    <!-- Hero Section: text + 3D viewer side by side -->
-    <section id="hero"
-      class="min-h-screen flex flex-col-reverse md:flex-row items-center md:justify-between px-4">
-      
-      <!-- Intro Text -->
-      <div class="w-full md:w-2/5 space-y-6 text-center md:text-left">
-        <h1 class="text-6xl text-accent uppercase animate-on-scroll">Hi, I’m Liam</h1>
-        <p class="text-xl max-w-lg animate-on-scroll">
-          Aerospace Engineering student at McMaster University,<br/>
-          passionate about space systems, rover design, and prototyping.
-        </p>
-        <a href="#projects"
-           class="inline-block px-8 py-4 bg-accent text-background rounded-full uppercase tracking-wider animate-on-scroll">
-          View Projects
-        </a>
-      </div>
-
-      <!-- 3D Model Viewer -->
-      <div class="w-full md:w-2/5 flex justify-center mb-8 md:mb-0">
-        <model-viewer
-          src="assets/sensor_mount.glb"
-          alt="3D model of my sensor mount"
-          ar
-          camera-controls
-          auto-rotate
-          camera-orbit="90deg 75deg 2.5m"
-          style="width:100%; max-width:400px; height:400px; background:transparent;"
-          class="animate-on-scroll"
-        ></model-viewer>
+    <!-- Hero: centered container -->
+    <section id="hero" class="min-h-screen flex items-center justify-center px-4">
+      <div class="max-w-5xl w-full flex flex-col-reverse md:flex-row items-center justify-between gap-8">
+        <!-- Intro Text -->
+        <div class="w-full md:w-1/2 space-y-6 text-center md:text-left">
+          <h1 class="text-6xl text-accent uppercase animate-on-scroll">Hi, I’m Liam</h1>
+          <p class="text-xl max-w-lg animate-on-scroll">
+            Aerospace Engineering student at McMaster University,<br/>
+            passionate about space systems, rover design, and prototyping.
+          </p>
+          <a href="#projects"
+             class="inline-block px-8 py-4 bg-accent text-background rounded-full uppercase tracking-wider animate-on-scroll">
+            View Projects
+          </a>
+        </div>
+        <!-- 3D Model Viewer -->
+        <div class="w-full md:w-1/2 flex justify-center">
+          <model-viewer
+            src="assets/sensor_mount.glb"
+            alt="3D model of my sensor mount"
+            ar
+            camera-controls
+            auto-rotate
+            camera-orbit="90deg 75deg 2.5m"
+            style="width:100%; max-width:400px; height:400px; background:transparent;"
+            class="animate-on-scroll"
+          ></model-viewer>
+        </div>
       </div>
     </section>
 
@@ -175,14 +176,14 @@
 
   </div>
 
-  <!-- Intersection Observer for scroll animations -->
+  <!-- Intersection Observer for animations -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const obs = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate');
-            obs.unobserve(entry.target);
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('animate');
+            obs.unobserve(e.target);
           }
         });
       }, { threshold: 0.15 });
