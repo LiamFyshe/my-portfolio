@@ -136,14 +136,15 @@
     <!-- 3D Model Viewer Section -->
     <section id="viewer" class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/20 border-t border-primary/30">
       <h2 class="text-5xl text-accent mb-6 uppercase animate-on-scroll">Interactive 3D Model</h2>
+      <!-- Updated src to sensor_mount.glb -->
       <model-viewer
-        src="assets/mount.glb"
+        src="assets/sensor_mount.glb"
         alt="3D model of my sensor mount"
         ar
         camera-controls
         auto-rotate
-        style="width:100%; max-width:600px; height:60vh; background:transparent;"
-        class="animate-on-scroll">
+        style="width:100%; max-width:600px; height:60vh; background:transparent; border:2px dashed #10b981;"
+        class="animate-on-scroll mx-auto">
       </model-viewer>
       <p class="text-lg max-w-3xl text-center mt-6 text-text animate-on-scroll">
         Rotate, pan, and zoom to explore the sensor mount design in 3D.
@@ -184,7 +185,7 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/30 border-t border-primary/30">
+    <section id="contact" class="min-h-screen flex flex-col items-center justify-center px-4 bg-background/20 border-t border-primary/30">
       <h2 class="text-5xl text-accent mb-6 uppercase animate-on-scroll">Get In Touch</h2>
       <p class="text-lg max-w-3xl text-center mb-6 text-text animate-on-scroll">
         Let’s discuss how I can help your team reach new heights in aerospace engineering.
