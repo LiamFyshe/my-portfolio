@@ -28,18 +28,18 @@
     }
   </script>
 
-  <!-- model-viewer component -->
+  <!-- model-viewer web component -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
   <style>
     body {
-      margin:0; overflow-x:hidden;
+      margin: 0; overflow-x: hidden;
       background: radial-gradient(ellipse at bottom, #030314 0%, #0a0a25 100%);
-      color:#fff; font-family:'Roboto', sans-serif;
+      color: #fff; font-family: 'Roboto', sans-serif;
     }
     html { scroll-behavior: smooth; }
-    .pt-nav { padding-top:2.5rem; } /* 40px */
-    #starfield { position:fixed; inset:0; z-index:-10; pointer-events:none; }
+    .pt-nav { padding-top: 2.5rem; } /* 40px header offset */
+    #starfield { position: fixed; inset: 0; z-index: -10; pointer-events: none; }
 
     @keyframes slideInUp {
       0% { opacity:0; transform:translateY(20px); }
@@ -48,13 +48,20 @@
     .animate-on-scroll { opacity:0; transform:translateY(20px); }
     .animate { animation: slideInUp 0.8s ease-out forwards; }
 
-    h1,h2,nav h1 { font-family:'Bebas Neue', cursive; letter-spacing:.05em; }
+    h1,h2,nav h1 { font-family:'Bebas Neue', cursive; letter-spacing:0.05em; }
     section { padding:1.5rem 0; }
 
-    /* 3D viewer cursors */
-    model-viewer { cursor: grab; background:transparent; }
-    model-viewer:active { cursor: grabbing; }
-    .drag-hint { font-size:.875rem; color:#aaa; margin-top:.5rem; text-align:center; }
+    model-viewer {
+      cursor: grab;
+      background: transparent;
+    }
+    model-viewer:active {
+      cursor: grabbing;
+    }
+    .drag-hint {
+      font-size: .875rem; color: #aaa;
+      margin-top: .5rem; text-align: center;
+    }
   </style>
 </head>
 <body class="pt-nav">
@@ -62,20 +69,22 @@
   <!-- Starfield -->
   <canvas id="starfield"></canvas>
   <script>
-    const c=document.getElementById('starfield'), ctx=c.getContext('2d');
-    let stars=[], N=200;
-    function resize(){ c.width=innerWidth; c.height=innerHeight; }
-    window.addEventListener('resize',resize); resize();
-    for(let i=0;i<N;i++) stars.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.2});
-    (function draw(){
-      ctx.clearRect(0,0,c.width,c.height);
-      ctx.fillStyle='#fff';
-      stars.forEach(s=>{ ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,2*Math.PI); ctx.fill(); });
+    const c = document.getElementById('starfield'), ctx = c.getContext('2d');
+    let stars = [], N = 200;
+    function resize() { c.width = innerWidth; c.height = innerHeight; }
+    window.addEventListener('resize', resize); resize();
+    for (let i = 0; i < N; i++) {
+      stars.push({ x: Math.random() * c.width, y: Math.random() * c.height, r: Math.random() * 1.2 });
+    }
+    (function draw() {
+      ctx.clearRect(0, 0, c.width, c.height);
+      ctx.fillStyle = '#fff';
+      stars.forEach(s => { ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI); ctx.fill(); });
       requestAnimationFrame(draw);
     })();
   </script>
 
-  <!-- Nav -->
+  <!-- Navigation -->
   <header class="fixed top-0 left-0 w-full h-10 bg-background/90 backdrop-blur z-50">
     <nav class="max-w-5xl mx-auto h-full flex items-center justify-between px-6 text-text">
       <h1 class="text-lg">Liam Aero</h1>
@@ -90,7 +99,7 @@
 
   <div class="pt-10"><!-- match header height -->
 
-    <!-- Hero -->
+    <!-- Hero Section -->
     <section id="hero" class="min-h-screen flex items-center justify-center px-4">
       <div class="max-w-5xl w-full flex flex-col-reverse md:flex-row items-center justify-between gap-6">
 
@@ -119,14 +128,19 @@
             alt="3D model of sensor mount"
             ar
             camera-controls
+            auto-rotate
+            auto-rotate-delay="0"
+            auto-rotate-speed="-1"     <!-- a bit faster CCW -->
             exposure="0.3"
             shadow-intensity="0.7"
-            camera-orbit="90deg 75deg 2.5m"
             interaction-prompt="auto"
+            camera-orbit="90deg 75deg 2.5m"
             style="
-              width:100%;max-width:360px;height:360px;
-              mask-image:linear-gradient(to bottom,transparent 0%,black 20%,black 80%,transparent 100%);
-              -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 20%,black 80%,transparent 100%);
+              width:100%;
+              max-width:360px;
+              height:360px;
+              mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+              -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
             "
             class="animate-on-scroll relative z-10"
           ></model-viewer>
@@ -173,12 +187,12 @@
         Say Hello
       </a>
     </section>
-
   </div>
 
+  <!-- Pause/play on drag -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // scroll-triggered reveals
+      // scroll reveals
       const obs = new IntersectionObserver(entries => {
         entries.forEach(e => {
           if (e.isIntersecting) {
@@ -189,47 +203,10 @@
       }, { threshold: 0.15 });
       document.querySelectorAll('.animate-on-scroll').forEach(el => obs.observe(el));
 
-      // custom spin + normalize pitch
+      // pause/resume auto-rotate cleanly
       const mv = document.getElementById('my-model');
-      let theta = 90, phi = 75, radius = 2.5;
-      let spinning = true, restoring = false;
-
-      mv.addEventListener('pointerdown', () => {
-        spinning = false;
-        restoring = false;
-      });
-      window.addEventListener('pointerup', () => {
-        // capture user orientation
-        const [t, p, r] = mv.getCameraOrbit(); // radians
-        theta  = t * 180/Math.PI;
-        phi    = p * 180/Math.PI;
-        radius = r;
-        spinning = true;
-        restoring = true;
-      });
-
-      function spin() {
-        if (spinning) {
-          theta = (theta - 0.2) % 360; // CCW at ~12°/s
-          if (restoring) {
-            const targetPhi = 75;
-            const diff = targetPhi - phi;
-            phi += diff * 0.08;         // smooth return
-            if (Math.abs(diff) < 0.5) {
-              phi = targetPhi;
-              restoring = false;
-            }
-          }
-          mv.cameraOrbit = `${theta}deg ${phi}deg ${radius}m`;
-          mv.jumpCameraToGoal();
-        }
-        requestAnimationFrame(spin);
-      }
-
-      mv.addEventListener('load', () => {
-        mv.interactionPrompt = 'auto';
-        spin();
-      });
+      mv.addEventListener('pointerdown', () => mv.pause());
+      window.addEventListener('pointerup',   () => mv.play());
     });
   </script>
 </body>
