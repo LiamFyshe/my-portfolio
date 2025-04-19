@@ -5,27 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Liam’s Aero Portfolio</title>
 
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+
   <!-- Tailwind via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Custom Tailwind color config -->
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            primary:    '#1e40af',  /* deep blue */
-            accent:     '#3b82f6',  /* bright sky blue */
-            background: '#f1f5f9',  /* light gray */
-            text:       '#1f2937'   /* dark gray */
+            primary:    '#1e40af',
+            accent:     '#3b82f6',
+            background: '#000014', /* deep night for starfield */
+            text:       '#f1f5f9',
           }
         }
       }
     }
   </script>
 
-  <!-- Page‑load animations -->
+  <!-- Custom styles: starfield + animations + fonts -->
   <style>
+    /* Starfield canvas covers the entire screen */
+    body { margin: 0; overflow: hidden; }
+    #starfield {
+      position: fixed;
+      inset: 0;
+      z-index: -10;
+      background: #000014;
+    }
+
+    /* Fade‑in animations */
     @keyframes fadeInUp {
       0%   { opacity: 0; transform: translateY(20px); }
       100% { opacity: 1; transform: translateY(0); }
@@ -36,9 +50,21 @@
     }
     .delay-200 { animation-delay: 0.2s; }
     .delay-400 { animation-delay: 0.4s; }
+
+    /* Font overrides */
+    body, p, a, nav ul li a {
+      font-family: 'Roboto', sans-serif;
+      color: #f1f5f9;
+    }
+    h1, h2, h3, nav h1 {
+      font-family: 'Orbitron', sans-serif;
+    }
   </style>
 </head>
+
 <body class="bg-background text-text">
+  <!-- Starfield Canvas -->
+  <canvas id="starfield"></canvas>
 
   <!-- Navigation -->
   <header class="bg-primary text-white p-4 fade-in-up delay-200">
@@ -55,23 +81,55 @@
 
   <!-- Hero Section -->
   <main class="min-h-screen flex flex-col items-center justify-center px-4 fade-in-up delay-400">
-    <h1 class="text-5xl font-extrabold text-primary mb-4">
+    <h1 class="text-5xl font-bold text-primary mb-4">
       Welcome to Liam’s Aero Portfolio
     </h1>
     <p class="text-xl max-w-xl text-center mb-6">
-      Engineering space systems, one project at a time.
+      Engineering space systems, one project at a time.
     </p>
     <a href="#projects" class="px-6 py-3 bg-accent text-white rounded hover:bg-accent/90">
       View Projects
     </a>
   </main>
 
-  <!-- Placeholder for future sections -->
-  <!--
-  <section id="projects">…</section>
-  <section id="about">…</section>
-  <section id="contact">…</section>
-  -->
+  <!-- Future sections… -->
+  <!-- <section id="projects">…</section> -->
+  <!-- <section id="about">…</section> -->
+  <!-- <section id="contact">…</section> -->
 
+  <!-- Starfield Animation Script -->
+  <script>
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    const numStars = 200;
+
+    function resize() {
+      canvas.width = innerWidth;
+      canvas.height = innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    for (let i = 0; i < numStars; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.2,
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#fff';
+      stars.forEach(s => {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI);
+        ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
 </body>
 </html>
